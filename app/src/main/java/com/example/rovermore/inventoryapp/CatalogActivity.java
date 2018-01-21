@@ -12,7 +12,7 @@ public class CatalogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
-        // Setup FAB to open EditorActivity
+        // Setup FAB to open DetailXActivity
         ImageButton add = (ImageButton) findViewById(R.id.ic_add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
