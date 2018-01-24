@@ -79,6 +79,7 @@ public class ItemProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
 
+        //This method evaluates if the data in the ContentValues is ok to introduce in the database
         if (!areValuesValidated(values)) {
             throw new IllegalArgumentException("Data not valid");
         } else {
@@ -123,6 +124,7 @@ public class ItemProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
 
+        //This method evaluates if the data in the ContentValues is ok to introduce in the database
         if (!areValuesValidated(values)) {
             throw new IllegalArgumentException("Data not valid");
         } else {
@@ -148,6 +150,7 @@ public class ItemProvider extends ContentProvider {
         }
     }
 
+    //This method evaluates if the data in the ContentValues is ok to introduce in the database
     public boolean areValuesValidated(ContentValues values) {
 
         boolean areValuesValidated = true;
