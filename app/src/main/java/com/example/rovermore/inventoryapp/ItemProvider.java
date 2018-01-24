@@ -42,7 +42,7 @@ public class ItemProvider extends ContentProvider {
 
         Cursor cursor;
 
-        int match = uriMatcher.match(uri);
+        final int match = uriMatcher.match(uri);
         switch (match) {
 
             case ITEMS:
@@ -83,7 +83,7 @@ public class ItemProvider extends ContentProvider {
 
         long newRowId;
         SQLiteDatabase db = itemDbHelper.getWritableDatabase();
-        int match = uriMatcher.match(uri);
+        final int match = uriMatcher.match(uri);
         switch (match){
             case ITEMS:
                 newRowId = db.insert(ItemContract.ItemEntry.TABLE_NAME, null, values);
@@ -97,7 +97,7 @@ public class ItemProvider extends ContentProvider {
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         int rowsDeleted;
         SQLiteDatabase db = itemDbHelper.getWritableDatabase();
-        int match = uriMatcher.match(uri);
+        final int match = uriMatcher.match(uri);
         switch (match) {
 
             case ITEMS:
@@ -125,7 +125,7 @@ public class ItemProvider extends ContentProvider {
 
         int rowsUpdated;
         SQLiteDatabase db = itemDbHelper.getWritableDatabase();
-        int match = uriMatcher.match(uri);
+        final int match = uriMatcher.match(uri);
         switch (match) {
 
             case ITEMS:
