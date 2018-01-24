@@ -29,11 +29,16 @@ public class ItemProvider extends ContentProvider {
     }
 
 
+    /**
+     * Initialize the provider and the database helper object.
+     */
     @Override
     public boolean onCreate() {
-        return false;
-    }
 
+        itemDbHelper = new ItemDbHelper(getContext());
+
+        return true;
+    }
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
@@ -72,7 +77,17 @@ public class ItemProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return null;
+
+        int match = uriMatcher.match(uri);
+        switch (match){
+            case ITEMS:
+                return ItemContract.ItemEntry.CONTENT_LIST_TYPE;
+            case ITEMS_ID:
+                return ItemContract.ItemEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri + " with match " + match);
+        }
+
     }
 
     @Nullable
