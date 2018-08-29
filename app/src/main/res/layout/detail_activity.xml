@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="Product Name"
+        android:hint="Product Name"
         android:textColor="@color/black" />
 
     <EditText
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:paddingTop="8dp"
-        android:text="Current Quantity" />
+        android:hint="Current Quantity" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -45,7 +45,15 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:paddingTop="8dp"
-        android:text="Price" />
+        android:hint="Price" />
+
+    <EditText
+        android:id="@+id/email_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:paddingTop="8dp"
+        android:hint="e-mail" />
 
     <Button
         android:id="@+id/order_detail"

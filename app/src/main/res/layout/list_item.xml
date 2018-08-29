@@ -4,11 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--android:descendantFocusability="blocksDescendants"-->
+
+
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/text_block">
+        android:id="@+id/text_block"
+        android:paddingLeft="16dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,7 +42,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/sale"
+        android:id="@+id/sale_button"
         android:text="Sale"
         android:layout_marginRight="30dp"
         android:layout_marginEnd="30dp"

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Inventory App</string>
+    <!--Message to delete all data in the database-->
+    <string name="delete_all">Do you want to delete all entries in the app?</string>
+    <!--Possitive button to dialogue-->
+    <string name="positive_button">Delete</string>
+    <!--Negative button to dialogue-->
+    <string name="negative_button">Cancel</string>
 </resources>

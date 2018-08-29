@@ -7,8 +7,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 /**
  * Created by robertomoreno on 21/1/18.
@@ -16,10 +14,12 @@ import android.support.annotation.Nullable;
 
 public class ItemProvider extends ContentProvider {
 
+    public static final String LOG_TAG = ItemProvider.class.getSimpleName();
+
     private static final int ITEMS = 101;
     private static final int ITEMS_ID = 102;
 
-    ItemDbHelper itemDbHelper;
+    private ItemDbHelper itemDbHelper;
 
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -39,9 +39,9 @@ public class ItemProvider extends ContentProvider {
 
         return true;
     }
-    @Nullable
+
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         SQLiteDatabase db = itemDbHelper.getReadableDatabase();
 
@@ -55,7 +55,6 @@ public class ItemProvider extends ContentProvider {
                 // projection, selection, selection arguments, and sort order. The cursor
                 // could contain multiple rows of the pets table.
                 cursor = db.query(ItemContract.ItemEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
-
                 break;
 
             case ITEMS_ID:
@@ -63,20 +62,19 @@ public class ItemProvider extends ContentProvider {
                 selection = ItemContract.ItemEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = db.query(ItemContract.ItemEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
-
                 break;
 
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
 
-
+        cursor.setNotificationUri(getContext().getContentResolver(),uri);
         return cursor;
     }
 
-    @Nullable
+
     @Override
-    public String getType(@NonNull Uri uri) {
+    public String getType(Uri uri) {
 
         int match = uriMatcher.match(uri);
         switch (match){
@@ -90,29 +88,57 @@ public class ItemProvider extends ContentProvider {
 
     }
 
-    @Nullable
-    @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
 
-        //This method evaluates if the data in the ContentValues is ok to introduce in the database
-        if (!areValuesValidated(values)) {
-            throw new IllegalArgumentException("Data not valid");
-        } else {
+    @Override
+    public Uri insert(Uri uri, ContentValues values) {
+
+        if (values.containsKey(ItemContract.ItemEntry.PRODUCT_NAME)) {
+            String name = values.getAsString(ItemContract.ItemEntry.PRODUCT_NAME);
+            if (name == null) {
+                throw new IllegalArgumentException("Item requires name");
+            }
+        }
+
+        if (values.containsKey(ItemContract.ItemEntry.QUANTITY)) {
+            Integer quantity = values.getAsInteger(ItemContract.ItemEntry.QUANTITY);
+            if (quantity < 0) {
+                throw new IllegalArgumentException("Item requires quantity");
+            }
+        }
+
+        if (values.containsKey(ItemContract.ItemEntry.PRICE)) {
+            Integer price = values.getAsInteger(ItemContract.ItemEntry.PRICE);
+            if (price < 0) {
+                throw new IllegalArgumentException("Item requires price");
+            }
+        }
+
+        if (values.containsKey(ItemContract.ItemEntry.MAIL)) {
+            String mail = values.getAsString(ItemContract.ItemEntry.MAIL);
+            if (mail == null) {
+                throw new IllegalArgumentException("Item requires mail");
+            }
 
             long newRowId;
+
             SQLiteDatabase db = itemDbHelper.getWritableDatabase();
+
             final int match = uriMatcher.match(uri);
+
             switch (match) {
                 case ITEMS:
+                    getContext().getContentResolver().notifyChange(uri,null);
                     newRowId = db.insert(ItemContract.ItemEntry.TABLE_NAME, null, values);
+                    getContext().getContentResolver().notifyChange(uri,null);
                     return ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI, newRowId);
             }
-            return null;
+
         }
+        return null;
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+    public int delete(Uri uri,String selection,String[] selectionArgs) {
         int rowsDeleted;
         SQLiteDatabase db = itemDbHelper.getWritableDatabase();
         final int match = uriMatcher.match(uri);
@@ -120,6 +146,7 @@ public class ItemProvider extends ContentProvider {
 
             case ITEMS:
                 rowsDeleted = db.delete(ItemContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
+                getContext().getContentResolver().notifyChange(uri,null);
                 return rowsDeleted;
 
 
@@ -127,6 +154,7 @@ public class ItemProvider extends ContentProvider {
                 selection = ItemContract.ItemEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = db.delete(ItemContract.ItemEntry.TABLE_NAME, selection, selectionArgs);
+                getContext().getContentResolver().notifyChange(uri,null);
                 return rowsDeleted;
 
             default:
@@ -137,12 +165,35 @@ public class ItemProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
-        //This method evaluates if the data in the ContentValues is ok to introduce in the database
-        if (!areValuesValidated(values)) {
-            throw new IllegalArgumentException("Data not valid");
-        } else {
+        if (values.containsKey(ItemContract.ItemEntry.PRODUCT_NAME)) {
+            String name = values.getAsString(ItemContract.ItemEntry.PRODUCT_NAME);
+            if (name == null) {
+                throw new IllegalArgumentException("Item requires name");
+            }
+        }
+
+        if (values.containsKey(ItemContract.ItemEntry.QUANTITY)) {
+            Integer quantity = values.getAsInteger(ItemContract.ItemEntry.QUANTITY);
+            if (quantity < 0) {
+                throw new IllegalArgumentException("Item requires quantity");
+            }
+        }
+
+        if (values.containsKey(ItemContract.ItemEntry.PRICE)) {
+            Integer price = values.getAsInteger(ItemContract.ItemEntry.PRICE);
+            if (price < 0) {
+                throw new IllegalArgumentException("Item requires price");
+            }
+        }
+
+        if (values.containsKey(ItemContract.ItemEntry.MAIL)) {
+            String mail = values.getAsString(ItemContract.ItemEntry.MAIL);
+            if (mail == null) {
+                throw new IllegalArgumentException("Item requires mail");
+            }
+        }
 
             int rowsUpdated;
             SQLiteDatabase db = itemDbHelper.getWritableDatabase();
@@ -151,57 +202,19 @@ public class ItemProvider extends ContentProvider {
 
                 case ITEMS:
                     rowsUpdated = db.update(ItemContract.ItemEntry.TABLE_NAME, values, selection, selectionArgs);
+                    getContext().getContentResolver().notifyChange(uri,null);
                     return rowsUpdated;
 
                 case ITEMS_ID:
                     selection = ItemContract.ItemEntry._ID + "=?";
                     selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                     rowsUpdated = db.update(ItemContract.ItemEntry.TABLE_NAME, values, selection, selectionArgs);
+                    getContext().getContentResolver().notifyChange(uri,null);
                     return rowsUpdated;
                 default:
                     throw new IllegalArgumentException("Cannot query unknown URI " + uri);
             }
 
-        }
-    }
 
-    //This method evaluates if the data in the ContentValues is ok to introduce in the database
-    public boolean areValuesValidated(ContentValues values) {
-
-        boolean areValuesValidated = true;
-
-        if (values.containsKey(ItemContract.ItemEntry.PRODUCT_NAME)) {
-            String name = values.getAsString(ItemContract.ItemEntry.PRODUCT_NAME);
-            if (name == null) {
-                areValuesValidated = false;
-                return areValuesValidated;
-            }
-        }
-
-        if (values.containsKey(ItemContract.ItemEntry.QUANTITY)) {
-            Integer quantity = values.getAsInteger(ItemContract.ItemEntry.QUANTITY);
-            if (quantity < 0 && quantity == null) {
-                areValuesValidated = false;
-                return areValuesValidated;
-            }
-        }
-
-        if (values.containsKey(ItemContract.ItemEntry.PRICE)) {
-            Integer price = values.getAsInteger(ItemContract.ItemEntry.PRICE);
-            if (price < 0 && price == null) {
-                areValuesValidated = false;
-                return areValuesValidated;
-            }
-        }
-
-        if (values.containsKey(ItemContract.ItemEntry.MAIL)) {
-            String mail = values.getAsString(ItemContract.ItemEntry.MAIL);
-            if (mail == null) {
-                areValuesValidated = false;
-                return areValuesValidated;
-            }
-        }
-
-        return areValuesValidated;
     }
 }

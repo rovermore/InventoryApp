@@ -27,7 +27,7 @@ public final class ItemContract {
         public static final String MAIL="mail";
 
         //Constant to access the content URI for the table items
-        public static final Uri CONTENT_URI = Uri.parse(BASE_CONTENT_URI + PATH_ITEMS);
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_ITEMS);
 
         //The MIME type of the {@link #CONTENT_URI} for a list of items.
         public static final String CONTENT_LIST_TYPE =

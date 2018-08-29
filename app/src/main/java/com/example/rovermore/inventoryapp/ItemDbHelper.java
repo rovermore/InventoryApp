@@ -10,19 +10,19 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ItemDbHelper extends SQLiteOpenHelper {
 
-    private static final String TEXT_TYPE = "TEXT";
-    private static final String INTEGER_TYPE = "INTEGER";
-    private static final String NOT_NULL = "NOT NULL";
-    private static final String COMMA = ",";
-    private static final String DEFAULT_0= "DEFAULT 0";
+    private static final String TEXT_TYPE = " TEXT";
+    private static final String INTEGER_TYPE = " INTEGER";
+    private static final String NOT_NULL = " NOT NULL";
+    private static final String COMMA = ", ";
+    private static final String DEFAULT_0= " DEFAULT 0";
     private static final String CREATE_SQL_ENTRIES =
-            "CREATE TABLE" + ItemContract.ItemEntry.TABLE_NAME +
+            "CREATE TABLE " + ItemContract.ItemEntry.TABLE_NAME +
                     "(" +
                     ItemContract.ItemEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + COMMA +
                     ItemContract.ItemEntry.PRODUCT_NAME + TEXT_TYPE + NOT_NULL + COMMA +
                     ItemContract.ItemEntry.QUANTITY + INTEGER_TYPE + DEFAULT_0 + COMMA +
                     ItemContract.ItemEntry.PRICE + INTEGER_TYPE + DEFAULT_0 + COMMA +
-                    ItemContract.ItemEntry.MAIL + TEXT_TYPE + COMMA +
+                    ItemContract.ItemEntry.MAIL + TEXT_TYPE +
                     ")";
     private static final String DELETE_SQL_ENTRIES =
             "DROP TABLE IF EXISTS" + ItemContract.ItemEntry.TABLE_NAME;
