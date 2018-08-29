@@ -33,13 +33,7 @@ public class ItemCursorAdapter extends CursorAdapter {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"test click 2", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setType("*/*");
-                String address = cursor.getString(cursor.getColumnIndexOrThrow(ItemContract.ItemEntry.MAIL));
-                intent.putExtra(Intent.EXTRA_EMAIL, address);
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Suply request");
-                context.startActivity(intent);
+
 
             }
         });
@@ -87,5 +81,23 @@ public class ItemCursorAdapter extends CursorAdapter {
                 context.startActivity(intent);
             }
         });
+    }
+
+    private void sellProduct(Cursor cursor, Context context){
+
+       int mQuantity = cursor.getColumnIndexOrThrow(ItemContract.ItemEntry.QUANTITY);
+
+       if(mQuantity>0) {
+           mQuantity = mQuantity - 1;
+       }else {
+
+           Toast.makeText(context, "There's no stock of the product", Toast.LENGTH_LONG).show();
+       }
+
+        int position = cursor.getPosition();
+        final long id = getItemId(position);
+
+        //HACER UN UPDATE EN LA BBDD CON EL NUEVO VALOR DE QUANTITY
+
     }
 }
