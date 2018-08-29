@@ -32,6 +32,8 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
     private Uri uri;
 
+
+
     EditText mName;
 
     EditText mQuantity;
