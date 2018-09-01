@@ -1,6 +1,7 @@
 package com.example.rovermore.inventoryapp;
 
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -28,12 +29,13 @@ public class ItemCursorAdapter extends CursorAdapter {
 
         View row = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
 
-        Button sendButton = (Button)row.findViewById(R.id.sale_button);
+        Button saleButton = (Button)row.findViewById(R.id.sale_button);
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                sellProduct(cursor, context);
 
             }
         });
@@ -83,7 +85,7 @@ public class ItemCursorAdapter extends CursorAdapter {
         });
     }
 
-    private void sellProduct(Cursor cursor, Context context){
+    public void sellProduct(Cursor cursor, Context context){
 
        int mQuantity = cursor.getColumnIndexOrThrow(ItemContract.ItemEntry.QUANTITY);
 
@@ -97,7 +99,24 @@ public class ItemCursorAdapter extends CursorAdapter {
         int position = cursor.getPosition();
         final long id = getItemId(position);
 
-        //HACER UN UPDATE EN LA BBDD CON EL NUEVO VALOR DE QUANTITY
+        Uri uriCurrentItem = ContentUris.withAppendedId(ItemContract.ItemEntry.CONTENT_URI,id);
+
+        //get values from cursor an save in variables
+        String mName = cursor.getString(cursor.getColumnIndexOrThrow(ItemContract.ItemEntry.PRODUCT_NAME));
+        String mPrice = String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(ItemContract.ItemEntry.PRICE)));
+        String mMail = String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(ItemContract.ItemEntry.MAIL)));
+
+        //set values from cursor into the content values
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ItemContract.ItemEntry.PRODUCT_NAME,mName);
+        contentValues.put(ItemContract.ItemEntry.PRICE,mPrice);
+        contentValues.put(ItemContract.ItemEntry.QUANTITY, mQuantity);
+        contentValues.put(ItemContract.ItemEntry.MAIL, mMail);
+
+        int rowsUpdated = context.getContentResolver().update(uriCurrentItem,contentValues,null,null);
+
+        Toast.makeText(context,"Rows updated: " + rowsUpdated, Toast.LENGTH_LONG);
 
     }
+
 }

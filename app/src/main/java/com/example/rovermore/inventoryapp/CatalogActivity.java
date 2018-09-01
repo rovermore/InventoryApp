@@ -175,4 +175,5 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
         Toast.makeText(this,"Rows deleted: " + rowsDeleted,Toast.LENGTH_LONG).show();
     }
+
 }

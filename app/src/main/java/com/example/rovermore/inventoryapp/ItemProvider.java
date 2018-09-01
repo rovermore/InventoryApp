@@ -176,14 +176,14 @@ public class ItemProvider extends ContentProvider {
 
         if (values.containsKey(ItemContract.ItemEntry.QUANTITY)) {
             Integer quantity = values.getAsInteger(ItemContract.ItemEntry.QUANTITY);
-            if (quantity < 0) {
+            if (quantity < 0 && quantity != null) {
                 throw new IllegalArgumentException("Item requires quantity");
             }
         }
 
         if (values.containsKey(ItemContract.ItemEntry.PRICE)) {
             Integer price = values.getAsInteger(ItemContract.ItemEntry.PRICE);
-            if (price < 0) {
+            if (price < 0 && price != null) {
                 throw new IllegalArgumentException("Item requires price");
             }
         }

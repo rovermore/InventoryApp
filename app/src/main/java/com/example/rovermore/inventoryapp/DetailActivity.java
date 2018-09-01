@@ -104,6 +104,10 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             @Override
             public void onClick(View v) {
 
+                String textCurrentQuantity = String.valueOf(mQuantity.getText());
+
+                int currentQuantity = Integer.parseInt(textCurrentQuantity);
+
                 if(sign.equalsIgnoreCase("+")){
 
                     String textQuantity = String.valueOf(mQuantity.getText());
@@ -114,7 +118,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
                    mQuantity.setText(String.valueOf(newQuantity));
 
-                }else {
+                }else if(sign.equalsIgnoreCase("-") && currentQuantity > 0) {
 
                     String textQuantity = String.valueOf(mQuantity.getText());
 
@@ -123,6 +127,9 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
                     newQuantity = newQuantity - 1;
 
                     mQuantity.setText(String.valueOf(newQuantity));
+                }else{
+
+                    Toast.makeText(getApplicationContext(),"Negative quantities are not allowed", Toast.LENGTH_LONG);
                 }
 
 
@@ -221,8 +228,13 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
                 return true;
             case R.id.save:
                 //CALLS INSERT ITEM METHOD (WILL INSERT OR UPDATE DEPENDING ON THE PATH)
+                if (areValuesValidated()){
                 insertItem();
                 finish();
+                }else{
+                    //Toast.makeText(getApplicationContext(),"Please make sure to fill all the mandatory data",Toast.LENGTH_LONG);
+                    unCompletedInfo();
+                }
                 return true;
             case android.R.id.home:
                 // If the pet hasn't changed, continue with navigating up to parent activity
@@ -251,6 +263,49 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
                 return super.onOptionsItemSelected(item);
 
+    }
+
+    private void unCompletedInfo() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please make sure all fields are filled");
+        builder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog unCompletedInfo = builder.create();
+        unCompletedInfo.show();
+    }
+
+    private boolean areValuesValidated() {
+        String name = mName.getText().toString().trim();
+        String email = mEmail.getText().toString().trim();
+        String quantityText = mQuantity.getText().toString().trim();
+        String priceText = mPrice.getText().toString().trim();
+
+        if(TextUtils.isEmpty(name)){
+            return false;
+        }
+
+        if(TextUtils.isEmpty(email)){
+
+            return false;
+        }
+
+        if(TextUtils.isEmpty(quantityText)){
+
+            return false;
+        }
+
+        if(TextUtils.isEmpty(priceText)){
+
+            return false;
+        }
+
+        return true;
     }
 
     public void deleteItem(Uri uri) {

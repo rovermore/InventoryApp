@@ -19,7 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:paddingTop="8dp"
-        android:hint="Current Quantity" />
+        android:hint="Current Quantity"
+        android:inputType="number"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -45,6 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:paddingTop="8dp"
+        android:inputType="number"
         android:hint="Price" />
 
     <EditText
