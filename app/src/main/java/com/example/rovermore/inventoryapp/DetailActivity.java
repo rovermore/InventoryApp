@@ -106,6 +106,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Order button test",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("*/*");
                 intent.putExtra(Intent.EXTRA_EMAIL, "rovermore@gmail,com");
@@ -113,7 +114,6 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);
                 }
-
             }
         });
     }
