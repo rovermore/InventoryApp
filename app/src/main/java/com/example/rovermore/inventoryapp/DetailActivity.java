@@ -42,6 +42,8 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
     EditText mEmail;
 
+    Button order;
+
     public String[] projection = new String[]{
             ItemContract.ItemEntry._ID,
             ItemContract.ItemEntry.PRODUCT_NAME,
@@ -92,8 +94,28 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             lessButton.setOnTouchListener(mTouchListener);
             setOnClickListenerButton(moreButton);
             setOnClickListenerButton(lessButton);
+
+            order = (Button) findViewById(R.id.order_detail);
+            SetOrderOnClickListener(order);
         }
 
+    }
+
+    private void SetOrderOnClickListener(Button order) {
+
+        order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_EMAIL, "rovermore@gmail,com");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Test App email sending");
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+
+            }
+        });
     }
 
     public void setOnClickListenerButton (Button button){
